@@ -1,0 +1,114 @@
+[project]
+name = "robust-llm"
+description = "Testing the robustness of LLMs"
+requires-python = ">=3.10"
+version = "0.0.1"
+
+dependencies = [
+    "evaluate==0.4.1",
+    "datasets==3.5.1",
+    "huggingface_hub==0.30.0",
+    "hydra-core==1.3.2",
+    "torch==2.6.0",
+    "transformers==4.52.1",
+    "accelerate==1.6.0",
+    # Scipy version >=1.13 is incompatible with TextAttack.
+    # (We don't use TextAttack anymore, but don't want to change versions.)
+    "scipy>=1.12,<1.13.0",
+    "tdigest==0.5.2.2",
+    "conllu==4.5.3",
+    "wandb==0.19.3",
+    "semver==3.0.2",
+    "detoxify==0.5.2",
+    "openai==1.66.2",
+    # Pinning httpx based on https://community.openai.com/t/error-with-openai-1-56-0-client-init-got-an-unexpected-keyword-argument-proxies/1040332/12
+    "httpx==0.27.2",
+    "py-spy==0.3.14",
+    "rich==13.9.4",
+    "vllm==0.8.5",
+]
+
+[project.optional-dependencies]
+dev = [
+    "anthropic==0.49.0",
+    "black==24.4.0",
+    "isort==5.13.2",
+    "pre-commit==3.7.1",
+    "mypy==1.15.0",
+    "pyright==1.1.400",
+    # Needed for mypy to type check PyYAML
+    "types-PyYAML==6.0.12.20240311",
+    "pytest==8.1.1",
+    "hypothesis==6.103.2",
+    "matplotlib==3.9.0",
+    "pandas==2.2.2",
+    "seaborn==0.13.2",
+    "pytest-cov==5.0.0",
+    "pytest-mock==3.14.0",
+    "pytest-xdist==3.5.0",
+    "autoflake==2.3.1",
+    "flake8==7.0.0",
+    "flake8-docstrings==1.7.0",
+    "flake8-docstrings-complete==1.3.0",
+    "tomli==2.0.1",
+    "names-generator==0.2.0",
+    # For checking GPU memory usage
+    "nvidia-ml-py3==7.352.0",
+    "statsmodels==0.14.2",
+    "types-requests==2.32.0.20250306",
+]
+
+# Packages to be installed before [cuda] packages.
+cuda-deps = [
+    # flash_attn needs `packaging`, `wheel`, and `torch` to be pre-installed.
+    # https://github.com/Dao-AILab/flash-attention/issues/188
+    # https://github.com/Dao-AILab/flash-attention/issues/833#issuecomment-1953111510
+    "packaging==24.1",
+    "wheel==0.43.0",
+]
+
+# Packages that require nvcc to install.
+cuda = [
+    # Only needed if you set model.attention_implementation=flash_attention_2.
+    "flash_attn==2.7.4.post1",
+]
+
+# Alpaca Eval is slow to install and runs separately from the rest of our
+# codebase, so we just make these utility evals libraries a separate dependency
+# group.
+utility-evals = [
+    "alpaca-eval@git+https://github.com/AlignmentResearch/alpaca_eval@e8d5c17669735b94d4dd6b2ba72268d62dbab30f",
+    "lm-eval==0.4.7",
+]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+namespaces = false
+
+[tool.isort]
+profile = "black"
+# Necessary because of directories with
+# packages with the same name
+known_third_party = ["datasets", "wandb"]
+
+[tool.pyright]
+venvPath = "."
+venv = "venv"
+include = ["robust_llm"]
+# We need extraPaths so that pyright works on devboxes.
+# A better alternative would be to install the venv in the root of the project.
+extraPaths = ["/usr/local/venv/lib/python3.10/site-packages"]
+pythonVersion = "3.10"
+
+[tool.mypy]
+ignore_missing_imports = true
+python_version = "3.10"
+
+[tool.pytest.ini_options]
+markers = [
+    "multigpu: marks tests that we also want to run with multiple GPUs",
+    "timeout: marks tests that should be run with a timeout",
+]

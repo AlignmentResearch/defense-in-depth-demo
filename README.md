@@ -20,23 +20,5 @@ pip install .
 
 Note that this project has not been tested with different versions of Python.
 
-## Development installation
-
-If you want to install `robust-llm` with developer dependencies (which gives you development tools like linting and tests), do the following:
-
-1. Follow steps 1-4 from the [Simple installation](#simple-installation).
-
-2. Add [pre-commit](https://pre-commit.com/) hooks for various linting tasks by installing pre-commit:
-
-```
-pre-commit install
-```
-
-3. Install `robust-llm` in developer mode, with dev dependencies:
-
-```
-pip install -e '.[dev]'
-```
-
 ## Demo
 Run `python demo.py` to query the defense pipeline interactively.
