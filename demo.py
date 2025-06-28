@@ -43,7 +43,7 @@ FILTER_TEMPLATES = {
     "output_filter_template": "prompt_templates/few_shot_output_filter.yaml",
 }
 DTYPE = "bfloat16"
-ATTN_IMPL = "flash_attention_2"
+ATTN_IMPL = "eager" # Consider "flash_attention_2" for faster inference.
 
 
 def get_family(model_name: str) -> str:
