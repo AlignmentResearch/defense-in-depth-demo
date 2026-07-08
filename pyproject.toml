@@ -9,7 +9,7 @@ dependencies = [
     "datasets==3.5.1",
     "huggingface_hub==0.30.0",
     "hydra-core==1.3.2",
-    "torch==2.6.0",
+    "torch==2.12.1",
     "transformers==4.52.1",
     "accelerate==1.6.0",
     # Scipy version >=1.13 is incompatible with TextAttack.
