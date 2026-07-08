@@ -25,7 +25,7 @@ dependencies = [
     "httpx==0.27.2",
     "py-spy==0.3.14",
     "rich==13.9.4",
-    "vllm==0.8.5",
+    "vllm==0.24.0",
 ]
 
 [project.optional-dependencies]
